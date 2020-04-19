@@ -8,10 +8,11 @@ namespace CloudFavs.Api.Repositories
 {
     public interface IFavoriteRepository
     {
-        IEnumerable<Favorite> GetAllFavorites(Guid ownerId);
-        Favorite GetFavoriteById(Guid favoriteId);
-        Favorite AddFavorite(Favorite favorite);
-        Favorite UpdateFavorite(Favorite favorite);
-        void DeleteFavorite(Guid favoriteID);
+        Task<IEnumerable<Favorite>> GetAllFavorites(Guid ownerId);
+        Task<IEnumerable<Favorite>> GetPinnedFavorites(Guid ownerId);
+        Task<Favorite> GetFavoriteById(Guid favoriteId);
+        Task<Favorite> AddFavorite(Favorite favorite);
+        Task<Favorite> UpdateFavorite(Favorite favorite);
+        Task DeleteFavorite(Guid favoriteID);
     }
 }

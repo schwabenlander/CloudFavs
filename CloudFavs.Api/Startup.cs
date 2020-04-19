@@ -27,6 +27,14 @@ namespace CloudFavs.Api
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<IFolderRepository, FolderRepository>();
+            services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader());
+            });
+
             services.AddControllers();
         }
 

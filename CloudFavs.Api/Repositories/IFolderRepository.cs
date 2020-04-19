@@ -8,10 +8,10 @@ namespace CloudFavs.Api.Repositories
 {
     public interface IFolderRepository
     {
-        IEnumerable<Folder> GetAllFolders(Guid ownerId);
-        Folder GetFolderById(Guid folderId);
-        Folder AddFolder(Folder folder);
-        Folder UpdateFolder(Folder folder);
-        void DeleteFolder(Guid folderId);
+        Task<IEnumerable<Folder>> GetAllFolders(Guid ownerId);
+        Task<Folder> GetFolderById(Guid folderId);
+        Task<Folder> AddFolder(Folder folder);
+        Task<Folder> UpdateFolder(Folder folder);
+        Task DeleteFolder(Guid folderId);
     }
 }

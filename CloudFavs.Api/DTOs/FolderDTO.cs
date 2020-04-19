@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace CloudFavs.Shared
+namespace CloudFavs.Api.DTOs
 {
-    public class Folder
+    public class FolderDTO
     {
         public Guid Id { get; set; }
         public Guid OwnerId { get; set; }

@@ -1,4 +1,5 @@
 ﻿using CloudFavs.Shared;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,40 +16,38 @@ namespace CloudFavs.Api.Repositories
             this._dbContext = dbContext;
         }
 
-        public Folder AddFolder(Folder folder)
+        public async Task<Folder> AddFolder(Folder folder)
         {
             var newFolder = _dbContext.Add(folder);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return newFolder.Entity;
         }
 
-        public void DeleteFolder(Guid folderId)
+        public async Task DeleteFolder(Guid folderId)
         {
-            var folder = _dbContext.Folders.SingleOrDefault(f => f.Id == folderId);
-            if (folder == null) return;
+            var folder = await _dbContext.Folders.FindAsync(folderId);
 
             _dbContext.Folders.Remove(folder);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public IEnumerable<Folder> GetAllFolders(Guid ownerId)
+        public async Task<IEnumerable<Folder>> GetAllFolders(Guid ownerId)
         {
-            return _dbContext.Folders.Where(f => f.Owner == ownerId);
+            return await _dbContext.Folders.Where(f => f.OwnerId == ownerId).ToListAsync();
         }
 
-        public Folder GetFolderById(Guid folderId)
+        public async Task<Folder> GetFolderById(Guid folderId)
         {
-            return _dbContext.Folders.SingleOrDefault(f => f.Id == folderId);
+            return await _dbContext.Folders.FindAsync(folderId);
         }
 
-        public Folder UpdateFolder(Folder folder)
+        public async Task<Folder> UpdateFolder(Folder folder)
         {
-            var folderToUpdate = _dbContext.Folders.SingleOrDefault(f => f.Id == folder.Id);
-            if (folderToUpdate == null) return null;
+            var folderToUpdate = await _dbContext.Folders.FindAsync(folder.Id);
             
-            var updatedFolder = _dbContext.Folders.Update(folder);
-            _dbContext.SaveChanges();
+            var updatedFolder = _dbContext.Folders.Update(folderToUpdate);
+            await _dbContext.SaveChangesAsync();
 
             return updatedFolder.Entity;
         }

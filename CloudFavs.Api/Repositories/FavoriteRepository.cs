@@ -1,4 +1,5 @@
 ﻿using CloudFavs.Shared;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,29 +15,47 @@ namespace CloudFavs.Api.Repositories
         {
             this._dbContext = dbContext;
         }
-        public Favorite AddFavorite(Favorite favorite)
+        public async Task<Favorite> AddFavorite(Favorite favorite)
         {
-            throw new NotImplementedException();
+            var newFavorite = _dbContext.Favorites.Add(favorite);
+            await _dbContext.SaveChangesAsync();
+            
+            return newFavorite.Entity;
         }
 
-        public void DeleteFavorite(Guid favoriteID)
+        public async Task DeleteFavorite(Guid favoriteID)
         {
-            throw new NotImplementedException();
+            var favorite = await _dbContext.Favorites.FindAsync(favoriteID);
+            if (favorite == null) return;
+
+            _dbContext.Favorites.Remove(favorite);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public IEnumerable<Favorite> GetAllFavorites(Guid ownerId)
+        public async Task<IEnumerable<Favorite>> GetAllFavorites(Guid ownerId)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Favorites.Where(f => f.OwnerId == ownerId).ToListAsync();
         }
 
-        public Favorite GetFavoriteById(Guid favoriteId)
+        public async Task<Favorite> GetFavoriteById(Guid favoriteId)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Favorites.FindAsync(favoriteId);
         }
 
-        public Favorite UpdateFavorite(Favorite favorite)
+        public async Task<IEnumerable<Favorite>> GetPinnedFavorites(Guid ownerId)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Favorites.Where(f => f.OwnerId == ownerId && f.IsPinned).ToListAsync();
+        }
+
+        public async Task<Favorite> UpdateFavorite(Favorite favorite)
+        {
+            var favoriteToUpdate = await _dbContext.Favorites.FindAsync(favorite.Id);
+            if (favoriteToUpdate == null) return null;
+
+            var updatedFavorite =  _dbContext.Favorites.Update(favorite);
+            await _dbContext.SaveChangesAsync();
+
+            return updatedFavorite.Entity;
         }
     }
 }

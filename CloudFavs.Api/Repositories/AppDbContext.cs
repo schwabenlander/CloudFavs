@@ -22,11 +22,11 @@ namespace CloudFavs.Api.Repositories
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Folder>().HasData(new Folder 
-                { Id = new Guid("43d0b777-8548-4710-a7b2-fcd8aabf9488"), Owner = new Guid(), Name = "Learning" });
+                { Id = new Guid("43d0b777-8548-4710-a7b2-fcd8aabf9488"), OwnerId = new Guid(), Name = "Learning" });
             modelBuilder.Entity<Folder>().HasData(new Folder
-                { Id = new Guid("25641521-06e9-4e89-8425-ef22e365c5a4"), Owner = new Guid(), Name = "News" });
+                { Id = new Guid("25641521-06e9-4e89-8425-ef22e365c5a4"), OwnerId = new Guid(), Name = "News" });
             modelBuilder.Entity<Folder>().HasData(new Folder
-                { Id = new Guid("995d12ac-b84c-4dac-bcff-27857a1e9f95"), Owner = new Guid(), Name = "Games" });
+                { Id = new Guid("995d12ac-b84c-4dac-bcff-27857a1e9f95"), OwnerId = new Guid(), Name = "Games" });
 
             modelBuilder.Entity<Favorite>().HasData(
                 new Favorite
