@@ -18,6 +18,9 @@ namespace CloudFavs.Api.Repositories
 
         public async Task<Folder> AddFolder(Folder folder)
         {
+            folder.Created = DateTime.Now;
+            folder.LastUpdated = DateTime.Now;
+
             var newFolder = _dbContext.Add(folder);
             await _dbContext.SaveChangesAsync();
 
@@ -45,7 +48,9 @@ namespace CloudFavs.Api.Repositories
         public async Task<Folder> UpdateFolder(Folder folder)
         {
             var folderToUpdate = await _dbContext.Folders.FindAsync(folder.Id);
-            
+
+            folderToUpdate.LastUpdated = DateTime.Now;
+
             var updatedFolder = _dbContext.Folders.Update(folderToUpdate);
             await _dbContext.SaveChangesAsync();
 

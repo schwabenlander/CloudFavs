@@ -89,7 +89,6 @@ namespace CloudFavs.Api.Controllers
                 favorite.Uri = favoriteDto.Uri;
                 favorite.IsPinned = favoriteDto.IsPinned;
                 favorite.FolderId = favoriteDto.FolderId;
-                favorite.LastUpdated = DateTime.Now;
 
                 await _favoriteRepository.UpdateFavorite(favorite);
 

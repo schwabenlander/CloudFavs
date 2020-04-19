@@ -83,7 +83,6 @@ namespace CloudFavs.Api.Controllers
                 var folder = await _folderRepository.GetFolderById(id);
 
                 folder.Name = folderDto.Name;
-                folder.LastUpdated = DateTime.Now;
 
                 await _folderRepository.UpdateFolder(folder);
                 
@@ -116,7 +115,9 @@ namespace CloudFavs.Api.Controllers
             {
                 Id = folder.Id,
                 OwnerId = folder.OwnerId,
-                Name = folder.Name
+                Name = folder.Name,
+                Created = folder.Created,
+                LastUpdated = folder.LastUpdated
             };
     }
 }

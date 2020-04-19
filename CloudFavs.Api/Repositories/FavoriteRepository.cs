@@ -17,6 +17,9 @@ namespace CloudFavs.Api.Repositories
         }
         public async Task<Favorite> AddFavorite(Favorite favorite)
         {
+            favorite.Created = DateTime.Now;
+            favorite.LastUpdated = DateTime.Now;
+
             var newFavorite = _dbContext.Favorites.Add(favorite);
             await _dbContext.SaveChangesAsync();
             
@@ -52,6 +55,7 @@ namespace CloudFavs.Api.Repositories
             var favoriteToUpdate = await _dbContext.Favorites.FindAsync(favorite.Id);
             if (favoriteToUpdate == null) return null;
 
+            favorite.LastUpdated = DateTime.Now;
             var updatedFavorite =  _dbContext.Favorites.Update(favorite);
             await _dbContext.SaveChangesAsync();
 
