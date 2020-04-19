@@ -21,10 +21,30 @@ namespace CloudFavs.Api.Controllers
             this._folderRepository = folderRepository;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Folder>> GetAllFolders(Guid ownerId)
+        [HttpGet("all/{ownerId}")]
+        public ActionResult<IEnumerable<FolderDTO>> GetAllFolders(Guid ownerId)
         {
             return Ok(_folderRepository.GetAllFolders(ownerId).Select(f => FolderToDTO(f)).ToList());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<FolderDTO>> GetFolder(Guid id)
+        {
+            return Ok(FolderToDTO(await _folderRepository.GetFolderById(id)));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<FolderDTO>> CreateFolder([FromBody] FolderDTO folderDto)
+        {
+            var folder = new Folder
+            {
+                OwnerId = folderDto.OwnerId,
+                Name = folderDto.Name
+            };
+
+            var newFolder = await _folderRepository.AddFolder(folder);
+
+            return CreatedAtAction(nameof(GetFolder), new { id = newFolder.Id }, newFolder);
         }
 
         private static FolderDTO FolderToDTO(Folder folder) =>
