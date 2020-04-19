@@ -24,13 +24,29 @@ namespace CloudFavs.Api.Controllers
         [HttpGet("all/{ownerId}")]
         public ActionResult<IEnumerable<FolderDTO>> GetAllFolders(Guid ownerId)
         {
-            return Ok(_folderRepository.GetAllFolders(ownerId).Select(f => FolderToDTO(f)).ToList());
+            try
+            { 
+                return Ok(_folderRepository.GetAllFolders(ownerId).Select(f => FolderToDTO(f)).ToList());
+            }
+            catch
+            {
+                // TODO: Log exception
+                return NotFound();
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<FolderDTO>> GetFolder(Guid id)
         {
-            return Ok(FolderToDTO(await _folderRepository.GetFolderById(id)));
+            try
+            { 
+                return Ok(FolderToDTO(await _folderRepository.GetFolderById(id)));
+            }
+            catch
+            {
+                // TODO: Log exception
+                return NotFound();
+            }
         }
 
         [HttpPost]
@@ -42,9 +58,55 @@ namespace CloudFavs.Api.Controllers
                 Name = folderDto.Name
             };
 
-            var newFolder = await _folderRepository.AddFolder(folder);
+            try
+            { 
+                var newFolder = await _folderRepository.AddFolder(folder);
+                return CreatedAtAction(nameof(GetFolder), new { id = newFolder.Id }, FolderToDTO(newFolder));
+            }
+            catch
+            {
+                // TODO: Log exception
+                return BadRequest();
+            }
+        }
 
-            return CreatedAtAction(nameof(GetFolder), new { id = newFolder.Id }, newFolder);
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateFolder(Guid id, FolderDTO folderDto)
+        {
+            if (id != folderDto.Id)
+            {
+                return BadRequest();
+            }
+
+            try 
+            { 
+                var folder = await _folderRepository.GetFolderById(id);
+
+                folder.Name = folderDto.Name;
+                await _folderRepository.UpdateFolder(folder);
+                
+                return NoContent();
+            }
+            catch
+            {
+                // TODO: Log exception
+                return NotFound();
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteFolder(Guid id)
+        {
+            try
+            {
+                await _folderRepository.DeleteFolder(id);
+                return NoContent();
+            }
+            catch
+            {
+                // TODO: Log exception
+                return NotFound();
+            }
         }
 
         private static FolderDTO FolderToDTO(Folder folder) =>
