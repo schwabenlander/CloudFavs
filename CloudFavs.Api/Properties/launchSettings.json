@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/folder/all/00000000000000000000000000000000",
+      "launchUrl": "api/folder/all/66a5db8a-47f7-48a5-98f8-80b34452bf34",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "CloudFavs.Api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/folder/all/00000000000000000000000000000000",
+      "launchUrl": "api/folder/all/66a5db8a-47f7-48a5-98f8-80b34452bf34",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

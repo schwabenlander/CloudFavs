@@ -12,7 +12,8 @@ namespace CloudFavs.Shared
         public Guid FolderId { get; set; }
         public string Name { get; set; }
         public string Uri { get; set; }
-        public DateTime DateCreated { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastUpdated { get; set; }
         public bool IsPinned { get; set; }
     }
 }

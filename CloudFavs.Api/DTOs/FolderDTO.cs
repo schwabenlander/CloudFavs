@@ -10,5 +10,7 @@ namespace CloudFavs.Api.DTOs
         public Guid Id { get; set; }
         public Guid OwnerId { get; set; }
         public string Name { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastUpdated { get; set; }
     }
 }

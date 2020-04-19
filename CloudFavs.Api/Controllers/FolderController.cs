@@ -31,7 +31,7 @@ namespace CloudFavs.Api.Controllers
             catch
             {
                 // TODO: Log exception
-                return NotFound();
+                return BadRequest();
             }
         }
 
@@ -83,6 +83,8 @@ namespace CloudFavs.Api.Controllers
                 var folder = await _folderRepository.GetFolderById(id);
 
                 folder.Name = folderDto.Name;
+                folder.LastUpdated = DateTime.Now;
+
                 await _folderRepository.UpdateFolder(folder);
                 
                 return NoContent();
@@ -105,7 +107,7 @@ namespace CloudFavs.Api.Controllers
             catch
             {
                 // TODO: Log exception
-                return NotFound();
+                return BadRequest();
             }
         }
 
