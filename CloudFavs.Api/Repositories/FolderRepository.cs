@@ -32,9 +32,9 @@ namespace CloudFavs.Api.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Folder>> GetAllFolders(Guid ownerId)
+        public IEnumerable<Folder> GetAllFolders(Guid ownerId)
         {
-            return await _dbContext.Folders.Where(f => f.OwnerId == ownerId).ToListAsync();
+            return  _dbContext.Folders.Where(f => f.OwnerId == ownerId);
         }
 
         public async Task<Folder> GetFolderById(Guid folderId)

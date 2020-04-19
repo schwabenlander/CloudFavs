@@ -8,7 +8,7 @@ namespace CloudFavs.Api.Repositories
 {
     public interface IFolderRepository
     {
-        Task<IEnumerable<Folder>> GetAllFolders(Guid ownerId);
+        IEnumerable<Folder> GetAllFolders(Guid ownerId);
         Task<Folder> GetFolderById(Guid folderId);
         Task<Folder> AddFolder(Folder folder);
         Task<Folder> UpdateFolder(Folder folder);

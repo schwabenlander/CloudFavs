@@ -22,9 +22,9 @@ namespace CloudFavs.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Folder>>> GetAllFolders(Guid ownerId)
+        public ActionResult<IEnumerable<Folder>> GetAllFolders(Guid ownerId)
         {
-            return Ok(await _folderRepository.GetAllFolders(ownerId));
+            return Ok(_folderRepository.GetAllFolders(ownerId).Select(f => FolderToDTO(f)).ToList());
         }
 
         private static FolderDTO FolderToDTO(Folder folder) =>

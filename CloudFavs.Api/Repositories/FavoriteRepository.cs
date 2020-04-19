@@ -32,9 +32,9 @@ namespace CloudFavs.Api.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Favorite>> GetAllFavorites(Guid ownerId)
+        public IEnumerable<Favorite> GetAllFavorites(Guid ownerId)
         {
-            return await _dbContext.Favorites.Where(f => f.OwnerId == ownerId).ToListAsync();
+            return _dbContext.Favorites.Where(f => f.OwnerId == ownerId);
         }
 
         public async Task<Favorite> GetFavoriteById(Guid favoriteId)
@@ -42,9 +42,9 @@ namespace CloudFavs.Api.Repositories
             return await _dbContext.Favorites.FindAsync(favoriteId);
         }
 
-        public async Task<IEnumerable<Favorite>> GetPinnedFavorites(Guid ownerId)
+        public IEnumerable<Favorite> GetPinnedFavorites(Guid ownerId)
         {
-            return await _dbContext.Favorites.Where(f => f.OwnerId == ownerId && f.IsPinned).ToListAsync();
+            return _dbContext.Favorites.Where(f => f.OwnerId == ownerId && f.IsPinned);
         }
 
         public async Task<Favorite> UpdateFavorite(Favorite favorite)
