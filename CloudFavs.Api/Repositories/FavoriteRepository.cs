@@ -17,8 +17,12 @@ namespace CloudFavs.Api.Repositories
         }
         public async Task<Favorite> AddFavorite(Favorite favorite)
         {
+            // ensure underlying folder exists
+            if (!(await _dbContext.Folders.AnyAsync(f => f.Id == favorite.FolderId)))
+                throw new Exception($"Folder ({favorite.FolderId}) does not exist.");
+
             favorite.Created = DateTime.Now;
-            favorite.LastUpdated = DateTime.Now;
+            favorite.LastModified = DateTime.Now;
 
             var newFavorite = _dbContext.Favorites.Add(favorite);
             await _dbContext.SaveChangesAsync();
@@ -45,9 +49,9 @@ namespace CloudFavs.Api.Repositories
             return await _dbContext.Favorites.FindAsync(favoriteId);
         }
 
-        public IEnumerable<Favorite> GetPinnedFavorites(Guid ownerId)
+        public IEnumerable<Favorite> GetAllFavoritesInFolder(Guid folderId)
         {
-            return _dbContext.Favorites.Where(f => f.OwnerId == ownerId && f.IsPinned);
+            return _dbContext.Favorites.Where(f => f.FolderId == folderId);
         }
 
         public async Task<Favorite> UpdateFavorite(Favorite favorite)
@@ -55,7 +59,7 @@ namespace CloudFavs.Api.Repositories
             var favoriteToUpdate = await _dbContext.Favorites.FindAsync(favorite.Id);
             if (favoriteToUpdate == null) return null;
 
-            favorite.LastUpdated = DateTime.Now;
+            favorite.LastModified = DateTime.Now;
             var updatedFavorite =  _dbContext.Favorites.Update(favorite);
             await _dbContext.SaveChangesAsync();
 

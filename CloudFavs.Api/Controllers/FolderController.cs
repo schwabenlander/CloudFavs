@@ -117,7 +117,7 @@ namespace CloudFavs.Api.Controllers
                 OwnerId = folder.OwnerId,
                 Name = folder.Name,
                 Created = folder.Created,
-                LastUpdated = folder.LastUpdated
+                LastModified = folder.LastModified
             };
     }
 }

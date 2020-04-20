@@ -19,7 +19,7 @@ namespace CloudFavs.Api.Repositories
         public async Task<Folder> AddFolder(Folder folder)
         {
             folder.Created = DateTime.Now;
-            folder.LastUpdated = DateTime.Now;
+            folder.LastModified = DateTime.Now;
 
             var newFolder = _dbContext.Add(folder);
             await _dbContext.SaveChangesAsync();
@@ -30,6 +30,10 @@ namespace CloudFavs.Api.Repositories
         public async Task DeleteFolder(Guid folderId)
         {
             var folder = await _dbContext.Folders.FindAsync(folderId);
+
+            // delete all favorites in the folder
+            var favorites = await _dbContext.Favorites.Where(f => f.FolderId == folder.Id).ToListAsync();
+            _dbContext.Favorites.RemoveRange(favorites);
 
             _dbContext.Folders.Remove(folder);
             await _dbContext.SaveChangesAsync();
@@ -49,7 +53,7 @@ namespace CloudFavs.Api.Repositories
         {
             var folderToUpdate = await _dbContext.Folders.FindAsync(folder.Id);
 
-            folderToUpdate.LastUpdated = DateTime.Now;
+            folderToUpdate.LastModified = DateTime.Now;
 
             var updatedFolder = _dbContext.Folders.Update(folderToUpdate);
             await _dbContext.SaveChangesAsync();

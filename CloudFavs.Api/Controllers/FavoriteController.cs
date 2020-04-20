@@ -35,6 +35,20 @@ namespace CloudFavs.Api.Controllers
             }
         }
 
+        [HttpGet("folder/{folderId}")]
+        public ActionResult<IEnumerable<FavoriteDTO>> GetAllFavoritesInFolder(Guid folderId)
+        {
+            try
+            {
+                return Ok(_favoriteRepository.GetAllFavoritesInFolder(folderId).Select(f => FavoriteToDTO(f)).ToList());
+            }
+            catch
+            {
+                // TODO: Log exception
+                return BadRequest();
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<FavoriteDTO>> GetFavorite(Guid id)
         {
@@ -126,7 +140,7 @@ namespace CloudFavs.Api.Controllers
                 Uri = favorite.Uri,
                 IsPinned = favorite.IsPinned,
                 Created = favorite.Created,
-                LastUpdated = favorite.LastUpdated
+                LastModified = favorite.LastModified
             };
     }
 }

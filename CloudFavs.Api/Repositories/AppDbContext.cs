@@ -26,7 +26,7 @@ namespace CloudFavs.Api.Repositories
                 OwnerId = new Guid("66a5db8a-47f7-48a5-98f8-80b34452bf34"), 
                 Name = "Learning",
                 Created = new DateTime(2020, 1, 1),
-                LastUpdated = new DateTime(2020, 1, 1)
+                LastModified = new DateTime(2020, 1, 1)
             });
             modelBuilder.Entity<Folder>().HasData(new Folder
             { 
@@ -34,7 +34,7 @@ namespace CloudFavs.Api.Repositories
                 OwnerId = new Guid("66a5db8a-47f7-48a5-98f8-80b34452bf34"), 
                 Name = "News",
                 Created = new DateTime(2020, 1, 1),
-                LastUpdated = new DateTime(2020, 1, 1)
+                LastModified = new DateTime(2020, 1, 1)
             });
             modelBuilder.Entity<Folder>().HasData(new Folder
             { 
@@ -42,7 +42,7 @@ namespace CloudFavs.Api.Repositories
                 OwnerId = new Guid("66a5db8a-47f7-48a5-98f8-80b34452bf34"), 
                 Name = "Games",
                 Created = new DateTime(2020, 1, 1),
-                LastUpdated = new DateTime(2020, 1, 1)
+                LastModified = new DateTime(2020, 1, 1)
             });
 
             modelBuilder.Entity<Favorite>().HasData(
@@ -55,7 +55,7 @@ namespace CloudFavs.Api.Repositories
                     Uri = "http://www.bbcnews.com",
                     IsPinned = true,
                     Created = new DateTime(2020, 1, 1),
-                    LastUpdated = new DateTime(2020, 1, 1)
+                    LastModified = new DateTime(2020, 1, 1)
                 });
         }
     }
