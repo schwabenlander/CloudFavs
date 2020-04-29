@@ -32,7 +32,12 @@ namespace CloudFavs.Api
 
             services.AddCors(options =>
             {
-                options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader());
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                        .SetIsOriginAllowed((host) => true)
+                        .AllowAnyHeader());
             });
 
             services.AddControllers();
@@ -50,8 +55,10 @@ namespace CloudFavs.Api
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseCors("CorsPolicy");
 
+            app.UseAuthorization();
+                        
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

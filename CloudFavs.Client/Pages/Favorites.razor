@@ -1,0 +1,36 @@
+@page "/favorites"
+@inject HttpClient Http
+
+<h1>Favorites List</h1>
+
+@if (favorites == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>URI</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var favorite in favorites)
+            {
+                <FavoriteRow Favorite="favorite"></FavoriteRow>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Favorite> favorites = new List<Favorite>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        favorites = await Http.GetFromJsonAsync<List<Favorite>>("https://localhost:44373/api/favorite/all/66a5db8a-47f7-48a5-98f8-80b34452bf34");
+    }
+}

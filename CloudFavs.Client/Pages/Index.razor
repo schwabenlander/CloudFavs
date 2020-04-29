@@ -1,0 +1,21 @@
+﻿@page "/"
+
+<h1>Hello, world!</h1>
+
+<DxButton RenderStyle="ButtonRenderStyle.Info" Click="@Like" IconCssClass="like" Text="Like">
+    @context
+    <span style="width: 0.8em; margin-left: 8px;">@likes.ToString()</span>
+</DxButton>
+
+@code {
+    int likes;
+    protected override void OnInitialized()
+    {
+        likes = 1;
+    }
+    void Like(MouseEventArgs args)
+    {
+        likes++;
+        InvokeAsync(StateHasChanged);
+    }
+}

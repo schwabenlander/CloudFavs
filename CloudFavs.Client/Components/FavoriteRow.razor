@@ -1,0 +1,18 @@
+﻿<tr>
+    <td>@Favorite.Name</td>
+    <td><a href="@Favorite.Uri">@Favorite.Uri</a></td>
+    <td>
+        <DxButton RenderStyle="@ButtonRenderStyle.Info" RenderStyleMode="@ButtonRenderStyleMode.Contained" Text="Edit" />
+        <DxButton RenderStyle="@ButtonRenderStyle.Danger" RenderStyleMode="@ButtonRenderStyleMode.Contained" Text="Delete" />
+    </td>
+</tr>
+
+@code{
+    [Parameter]
+    public Favorite Favorite { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+}

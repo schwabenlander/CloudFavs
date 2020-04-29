@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudFavs.Shared", "CloudFavs.Shared\CloudFavs.Shared.csproj", "{3DF6D1F5-5304-4A6A-A7F0-0526546C3C8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudFavs.Shared", "CloudFavs.Shared\CloudFavs.Shared.csproj", "{3DF6D1F5-5304-4A6A-A7F0-0526546C3C8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudFavs.Api", "CloudFavs.Api\CloudFavs.Api.csproj", "{9A014B5E-E6A4-4C1C-B64F-21D726FD151C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudFavs.Api", "CloudFavs.Api\CloudFavs.Api.csproj", "{9A014B5E-E6A4-4C1C-B64F-21D726FD151C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudFavs.Client", "CloudFavs.Client\CloudFavs.Client.csproj", "{EADC4864-AB94-4B3C-9DEF-7BEAA02828F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{9A014B5E-E6A4-4C1C-B64F-21D726FD151C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A014B5E-E6A4-4C1C-B64F-21D726FD151C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A014B5E-E6A4-4C1C-B64F-21D726FD151C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EADC4864-AB94-4B3C-9DEF-7BEAA02828F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EADC4864-AB94-4B3C-9DEF-7BEAA02828F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EADC4864-AB94-4B3C-9DEF-7BEAA02828F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EADC4864-AB94-4B3C-9DEF-7BEAA02828F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
