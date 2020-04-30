@@ -20,7 +20,7 @@ else
         <tbody>
             @foreach (var favorite in favorites)
             {
-                <FavoriteRow Favorite="favorite"></FavoriteRow>
+                <FavoriteRow @key="favorite" Favorite="favorite" OnFavoriteDeleted="DeleteFavorite"></FavoriteRow>
             }
         </tbody>
     </table>
@@ -31,6 +31,24 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        await GetFavorites();
+    }
+
+    protected async Task GetFavorites()
+    {
+        Console.WriteLine("Getting favorites");
         favorites = await Http.GetFromJsonAsync<List<Favorite>>("https://localhost:44373/api/favorite/all/66a5db8a-47f7-48a5-98f8-80b34452bf34");
+    }
+
+    protected async Task DeleteFavorite(Guid favoriteId)
+    {
+        Console.WriteLine($"Deleting favorite: {favoriteId}");
+        await Http.DeleteAsync($"https://localhost:44373/api/favorite/{favoriteId}");
+        await GetFavorites();
+    }
+
+    protected void OnNewFavoriteAdded()
+    {
+        //InvokeAsync(StateHasChanged);
     }
 }
