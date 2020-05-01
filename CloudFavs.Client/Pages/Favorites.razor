@@ -9,6 +9,12 @@
 }
 else
 {
+    <AddFavoritePopup @ref="AddFavoritePopup" OnNewFavoriteSaved="GetFavorites"></AddFavoritePopup>
+
+    <button class="btn btn-primary" @onclick="OnAddFavoriteButtonClicked">Add Favorite</button>
+
+    <p>&nbsp;</p>
+
     <table class="table">
         <thead>
             <tr>
@@ -29,6 +35,8 @@ else
 @code {
     private List<FavoriteDTO> favorites = new List<FavoriteDTO>();
 
+    private AddFavoritePopup AddFavoritePopup { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await GetFavorites();
@@ -45,8 +53,13 @@ else
         await GetFavorites();
     }
 
-    protected void OnNewFavoriteAdded()
+    protected void OnAddFavoriteButtonClicked(MouseEventArgs args)
     {
+        AddFavoritePopup.IsVisible = true;
+    }
 
+    protected async Task OnNewFavoriteAdded()
+    {
+        await GetFavorites();
     }
 }

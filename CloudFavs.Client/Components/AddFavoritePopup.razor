@@ -1,6 +1,6 @@
 ﻿@inject HttpClient Http
 
-<DxPopup HeaderText="Edit Favorite" @bind-Visible="@IsVisible">
+<DxPopup HeaderText="Add Favorite" @bind-Visible="@IsVisible">
     <Content>
         <EditForm Model="@Favorite" OnValidSubmit="@OnSave">
 
@@ -26,18 +26,17 @@
 </DxPopup>
 
 @code{
-    [Parameter]
-    public FavoriteDTO Favorite { get; set; }
+    public FavoriteDTO Favorite { get; set; } = new FavoriteDTO();
 
     [Parameter]
-    public EventCallback<Guid> OnEditSaved { get; set; }
+    public EventCallback<Guid> OnNewFavoriteSaved { get; set; }
 
     public bool IsVisible { get; set; }
 
     protected async Task OnSave()
     {
         IsVisible = false;
-        await Http.PutAsJsonAsync<FavoriteDTO>($"https://localhost:44373/api/favorite/{Favorite.Id}", Favorite);
-        await OnEditSaved.InvokeAsync(Favorite.Id);
+        await Http.PostAsJsonAsync<FavoriteDTO>($"https://localhost:44373/api/favorite", Favorite);
+        await OnNewFavoriteSaved.InvokeAsync(Favorite.Id);
     }
 }
