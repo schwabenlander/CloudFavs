@@ -1,27 +1,19 @@
-﻿<tr>
+﻿@inject HttpClient Http
+
+<tr>
     <td>@Favorite.Name</td>
     <td><a href="@Favorite.Uri" target="_blank">@Favorite.Uri</a></td>
     <td>
-        <DxButton RenderStyle="@ButtonRenderStyle.Info" RenderStyleMode="@ButtonRenderStyleMode.Contained" 
+        <DxButton RenderStyle="@ButtonRenderStyle.Info" RenderStyleMode="@ButtonRenderStyleMode.Contained"
                   Click="@OnEditClicked" Text="Edit" />
+
         <DxButton RenderStyle="@ButtonRenderStyle.Danger" RenderStyleMode="@ButtonRenderStyleMode.Contained"
                   Click="@OnDeleteClicked" Text="Delete" />
     </td>
 </tr>
 
-<DxPopup HeaderText="Delete Confirmation" @bind-Visible="@DeleteConfirmationVisible">
-    <Content>
-        <p>
-            Are you sure you want to delete this favorite?
-        </p>
-        <p>
-            <button class="btn btn-danger" @onclick="OnDeleteConfirmed">Delete</button>
-            <button class="btn btn-light" @onclick="@(() => DeleteConfirmationVisible = false)">Cancel</button>
-        </p>
-    </Content>
-</DxPopup>
-
-<EditFavoritePopup @ref="EditFavoritePopup" Favorite="Favorite" OnEditSaved="OnEditSaved"></EditFavoritePopup>
+<DeleteFavoritePopup @ref="DeleteFavoritePopup" Favorite="Favorite" OnDeleteConfirmed="DeleteFavorite"></DeleteFavoritePopup>
+<EditFavoritePopup @ref="EditFavoritePopup" Favorite="Favorite" OnEditSaved="UpdateFavorite"></EditFavoritePopup>
 
 @code{
     [Parameter]
@@ -31,17 +23,18 @@
     public EventCallback<Guid> OnFavoriteDeleted { get; set; }
 
     private EditFavoritePopup EditFavoritePopup { get; set; }
-
-    public bool DeleteConfirmationVisible { get; set; }
-
-    protected override Task OnInitializedAsync()
-    {
-        return base.OnInitializedAsync();
-    }
+    private DeleteFavoritePopup DeleteFavoritePopup { get; set; }
 
     protected void OnDeleteClicked(MouseEventArgs args)
     {
-        DeleteConfirmationVisible = true;
+        DeleteFavoritePopup.IsVisible = true;
+    }
+
+    protected async Task DeleteFavorite(Guid favoriteId)
+    {
+        Console.WriteLine($"[Deleting Favorite: {favoriteId.ToString()}]");
+        await Http.DeleteAsync($"https://localhost:44373/api/favorite/{favoriteId}");
+        await OnFavoriteDeleted.InvokeAsync(favoriteId);
     }
 
     protected void OnEditClicked(MouseEventArgs args)
@@ -49,14 +42,9 @@
         EditFavoritePopup.IsVisible = true;
     }
 
-    protected async Task OnDeleteConfirmed()
+    public async Task UpdateFavorite(Guid favoriteId)
     {
-        DeleteConfirmationVisible = false;
-        await OnFavoriteDeleted.InvokeAsync(Favorite.Id);
-    }
-
-    protected void OnEditSaved()
-    {
-        InvokeAsync(StateHasChanged);
+        Console.WriteLine($"[Getting Favorite: {favoriteId.ToString()}]");
+        Favorite = await Http.GetFromJsonAsync<FavoriteDTO>($"https://localhost:44373/api/favorite/{favoriteId}");
     }
 }
