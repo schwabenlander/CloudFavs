@@ -2,7 +2,8 @@
     <td>@Favorite.Name</td>
     <td><a href="@Favorite.Uri" target="_blank">@Favorite.Uri</a></td>
     <td>
-        <DxButton RenderStyle="@ButtonRenderStyle.Info" RenderStyleMode="@ButtonRenderStyleMode.Contained" Text="Edit" />
+        <DxButton RenderStyle="@ButtonRenderStyle.Info" RenderStyleMode="@ButtonRenderStyleMode.Contained" 
+                  Click="@OnEditClicked" Text="Edit" />
         <DxButton RenderStyle="@ButtonRenderStyle.Danger" RenderStyleMode="@ButtonRenderStyleMode.Contained"
                   Click="@OnDeleteClicked" Text="Delete" />
     </td>
@@ -13,19 +14,23 @@
         <p>
             Are you sure you want to delete this favorite?
         </p>
+        <p>
+            <button class="btn btn-danger" @onclick="OnDeleteConfirmed">Delete</button>
+            <button class="btn btn-light" @onclick="@(() => DeleteConfirmationVisible = false)">Cancel</button>
+        </p>
     </Content>
-    <FooterTemplate>
-        <button class="btn btn-outline-secondary" @onclick="@(() => DeleteConfirmationVisible = false)">Cancel</button>
-        <button class="btn btn-danger" @onclick="@OnDeleteConfirmed">Delete</button>
-    </FooterTemplate>
 </DxPopup>
+
+<EditFavoritePopup @ref="EditFavoritePopup" Favorite="Favorite" OnEditSaved="OnEditSaved"></EditFavoritePopup>
 
 @code{
     [Parameter]
-    public Favorite Favorite { get; set; }
+    public FavoriteDTO Favorite { get; set; }
 
     [Parameter]
     public EventCallback<Guid> OnFavoriteDeleted { get; set; }
+
+    private EditFavoritePopup EditFavoritePopup { get; set; }
 
     public bool DeleteConfirmationVisible { get; set; }
 
@@ -39,9 +44,19 @@
         DeleteConfirmationVisible = true;
     }
 
+    protected void OnEditClicked(MouseEventArgs args)
+    {
+        EditFavoritePopup.IsVisible = true;
+    }
+
     protected async Task OnDeleteConfirmed()
     {
         DeleteConfirmationVisible = false;
         await OnFavoriteDeleted.InvokeAsync(Favorite.Id);
+    }
+
+    protected void OnEditSaved()
+    {
+        InvokeAsync(StateHasChanged);
     }
 }

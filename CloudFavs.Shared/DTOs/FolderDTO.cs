@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CloudFavs.Api.DTOs
+namespace CloudFavs.Shared.DTOs
 {
     public class FolderDTO
     {

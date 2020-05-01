@@ -27,7 +27,7 @@ else
 }
 
 @code {
-    private List<Favorite> favorites = new List<Favorite>();
+    private List<FavoriteDTO> favorites = new List<FavoriteDTO>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,7 +37,7 @@ else
     protected async Task GetFavorites()
     {
         Console.WriteLine("Getting favorites");
-        favorites = await Http.GetFromJsonAsync<List<Favorite>>("https://localhost:44373/api/favorite/all/66a5db8a-47f7-48a5-98f8-80b34452bf34");
+        favorites = await Http.GetFromJsonAsync<List<FavoriteDTO>>("https://localhost:44373/api/favorite/all/66a5db8a-47f7-48a5-98f8-80b34452bf34");
     }
 
     protected async Task DeleteFavorite(Guid favoriteId)

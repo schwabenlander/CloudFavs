@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CloudFavs.Api.DTOs;
 using CloudFavs.Api.Repositories;
 using CloudFavs.Shared;
+using CloudFavs.Shared.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
