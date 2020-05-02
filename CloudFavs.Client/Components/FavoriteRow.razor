@@ -22,6 +22,9 @@
     [Parameter]
     public EventCallback<Guid> OnFavoriteDeleted { get; set; }
 
+    [Parameter]
+    public EventCallback<Guid> OnFavoriteUpdated { get; set; }
+
     private EditFavoritePopup EditFavoritePopup { get; set; }
     private DeleteFavoritePopup DeleteFavoritePopup { get; set; }
 
@@ -45,6 +48,7 @@
     public async Task UpdateFavorite(Guid favoriteId)
     {
         Console.WriteLine($"[Getting Favorite: {favoriteId.ToString()}]");
-        Favorite = await Http.GetFromJsonAsync<FavoriteDTO>($"https://localhost:44373/api/favorite/{favoriteId}");
+        //Favorite = await Http.GetFromJsonAsync<FavoriteDTO>($"https://localhost:44373/api/favorite/{favoriteId}");
+        await OnFavoriteUpdated.InvokeAsync(favoriteId);
     }
 }

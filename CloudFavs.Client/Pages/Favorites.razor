@@ -26,7 +26,9 @@ else
         <tbody>
             @foreach (var favorite in favorites)
             {
-                <FavoriteRow @key="favorite" Favorite="favorite" OnFavoriteDeleted="OnFavoriteDeleted"></FavoriteRow>
+                <FavoriteRow @key="favorite" Favorite="favorite" 
+                             OnFavoriteDeleted="OnFavoriteDeleted"
+                             OnFavoriteUpdated="OnFavoriteUpdated"></FavoriteRow>
             }
         </tbody>
     </table>
@@ -45,10 +47,16 @@ else
     protected async Task GetFavorites()
     {
         Console.WriteLine("[Getting Favorites]");
-        favorites = await Http.GetFromJsonAsync<List<FavoriteDTO>>("https://localhost:44373/api/favorite/all/66a5db8a-47f7-48a5-98f8-80b34452bf34");
+        favorites = (await Http.GetFromJsonAsync<List<FavoriteDTO>>("https://localhost:44373/api/favorite/all/66a5db8a-47f7-48a5-98f8-80b34452bf34"))
+            .OrderBy(f => f.Name).ToList();
     }
 
     protected async Task OnFavoriteDeleted(Guid favoriteId)
+    {
+        await GetFavorites();
+    }
+
+    protected async Task OnFavoriteUpdated(Guid favoriteId)
     {
         await GetFavorites();
     }

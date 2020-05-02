@@ -10,7 +10,10 @@ namespace CloudFavs.Shared.DTOs
     {
         public Guid Id { get; set; }
 
+        [Required]
         public Guid OwnerId { get; set; }
+
+        public Guid? ParentFolderId { get; set; }
 
         [Required]
         public string Name { get; set; }

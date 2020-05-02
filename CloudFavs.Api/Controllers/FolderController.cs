@@ -55,6 +55,7 @@ namespace CloudFavs.Api.Controllers
             var folder = new Folder
             {
                 OwnerId = folderDto.OwnerId,
+                ParentFolderId = folderDto.ParentFolderId,
                 Name = folderDto.Name
             };
 
@@ -83,6 +84,7 @@ namespace CloudFavs.Api.Controllers
                 var folder = await _folderRepository.GetFolderById(id);
 
                 folder.Name = folderDto.Name;
+                folder.ParentFolderId = folderDto.ParentFolderId;
 
                 await _folderRepository.UpdateFolder(folder);
                 
@@ -115,6 +117,7 @@ namespace CloudFavs.Api.Controllers
             {
                 Id = folder.Id,
                 OwnerId = folder.OwnerId,
+                ParentFolderId = folder.ParentFolderId,
                 Name = folder.Name,
                 Created = folder.Created,
                 LastModified = folder.LastModified

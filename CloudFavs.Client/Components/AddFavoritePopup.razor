@@ -36,6 +36,12 @@
     protected async Task OnSave()
     {
         IsVisible = false;
+
+        // Temporarily hard-coding meta data
+        Favorite.OwnerId = Guid.Parse("66A5DB8A-47F7-48A5-98F8-80B34452BF34");
+        Favorite.FolderId = Guid.Parse("25641521-06E9-4E89-8425-EF22E365C5A4");
+
+        Console.WriteLine("[Adding New Favorite]");
         await Http.PostAsJsonAsync<FavoriteDTO>($"https://localhost:44373/api/favorite", Favorite);
         await OnNewFavoriteSaved.InvokeAsync(Favorite.Id);
     }
