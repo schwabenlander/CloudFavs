@@ -35,7 +35,7 @@
 
     protected async Task DeleteFavorite(Guid favoriteId)
     {
-        Console.WriteLine($"[Deleting Favorite: {favoriteId.ToString()}]");
+        Console.WriteLine($"[Deleting favorite: {favoriteId.ToString()}]");
         await Http.DeleteAsync($"https://localhost:44373/api/favorite/{favoriteId}");
         await OnFavoriteDeleted.InvokeAsync(favoriteId);
     }
@@ -47,8 +47,6 @@
 
     public async Task UpdateFavorite(Guid favoriteId)
     {
-        Console.WriteLine($"[Getting Favorite: {favoriteId.ToString()}]");
-        //Favorite = await Http.GetFromJsonAsync<FavoriteDTO>($"https://localhost:44373/api/favorite/{favoriteId}");
         await OnFavoriteUpdated.InvokeAsync(favoriteId);
     }
 }

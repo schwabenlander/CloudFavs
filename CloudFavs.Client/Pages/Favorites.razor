@@ -1,17 +1,19 @@
 @page "/favorites"
 @inject HttpClient Http
 
-<h1>Favorites</h1>
-
 @if (favorites == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
+    <h1>@SelectedFolder.Name Favorites</h1>
+
     <AddFavoritePopup @ref="AddFavoritePopup" OnNewFavoriteSaved="GetFavorites"></AddFavoritePopup>
 
     <button class="btn btn-primary" @onclick="OnAddFavoriteButtonClicked">Add Favorite</button>
+
+    <DxComboBox CssClass="float-right" Data="@folders" TextFieldName="Name" @bind-SelectedItem="@SelectedFolder"></DxComboBox>
 
     <p>&nbsp;</p>
 
@@ -35,20 +37,43 @@ else
 }
 
 @code {
-    private List<FavoriteDTO> favorites = new List<FavoriteDTO>();
+    private List<FavoriteDTO> favorites;
+    private List<FolderDTO> folders;
+    private FolderDTO selectedFolder;
+    protected FolderDTO SelectedFolder
+    {
+        get => selectedFolder;
+        set 
+        {
+            selectedFolder = value; 
+            GetFavorites();
+            InvokeAsync(StateHasChanged);
+        }
+    }
 
     private AddFavoritePopup AddFavoritePopup { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        await GetFolders();
+        SelectedFolder = folders.FirstOrDefault();
         await GetFavorites();
+    }
+
+    protected async Task GetFolders()
+    {
+        Console.WriteLine("[Getting folders]");
+        folders = (await Http.GetFromJsonAsync<List<FolderDTO>>("https://localhost:44373/api/folder/all/66A5DB8A-47F7-48A5-98F8-80B34452BF34"))
+            .OrderBy(f => f.Name).ToList();
     }
 
     protected async Task GetFavorites()
     {
-        Console.WriteLine("[Getting Favorites]");
-        favorites = (await Http.GetFromJsonAsync<List<FavoriteDTO>>("https://localhost:44373/api/favorite/all/66a5db8a-47f7-48a5-98f8-80b34452bf34"))
+        Console.WriteLine($"[Getting favorites for folder: {SelectedFolder.Id}]");
+        favorites = (await Http.GetFromJsonAsync<List<FavoriteDTO>>
+            ($"https://localhost:44373/api/favorite/folder/{SelectedFolder.Id}"))
             .OrderBy(f => f.Name).ToList();
+        InvokeAsync(StateHasChanged);
     }
 
     protected async Task OnFavoriteDeleted(Guid favoriteId)
