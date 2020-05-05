@@ -13,6 +13,7 @@ namespace CloudFavs.Shared.DTOs
         [Required]
         public Guid OwnerId { get; set; }
 
+        [Required]
         public Guid FolderId { get; set; }
 
         [Required]

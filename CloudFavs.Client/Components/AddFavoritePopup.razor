@@ -8,15 +8,26 @@
             <ValidationSummary />
 
             <div class="form-group">
-                <label for="lastName">Favorite Name: </label>
-                <InputText id="lastName" class="form-control" @bind-Value="@Favorite.Name" placeholder="Enter the favorite's name"></InputText>
+                <label for="favoriteNameInput">Favorite Name: </label>
+                <InputText id="favoriteNameInput" class="form-control" @bind-Value="@Favorite.Name" placeholder="Enter the favorite's name"></InputText>
                 <ValidationMessage For="@(() => Favorite.Name)" />
             </div>
 
             <div class="form-group">
-                <label for="firstName">Favorite URI: </label>
-                <InputText id="firstName" class="form-control" @bind-Value="@Favorite.Uri" placeholder="https://"></InputText>
+                <label for="favoriteUriInput">Favorite URI: </label>
+                <InputText id="favoriteUriInput" class="form-control" @bind-Value="@Favorite.Uri" placeholder="https://"></InputText>
                 <ValidationMessage For="@(() => Favorite.Uri)" />
+            </div>
+
+            <div class="form-group">
+                <label for="folderSelect">Folder: </label>
+                <InputSelectGuid id="folderSelect" class="form-control" @bind-Value="Favorite.FolderId">
+                    @foreach (var folder in folders)
+                    {
+                        <option value="@folder.Id">@folder.Name</option>
+                    }
+                </InputSelectGuid>
+                <ValidationMessage For="@(() => Favorite.FolderId)" />
             </div>
 
             <button class="btn btn-success" type="submit">Save</button>
@@ -26,6 +37,7 @@
 </DxPopup>
 
 @code{
+    private List<FolderDTO> folders;
     public FavoriteDTO Favorite { get; set; } = new FavoriteDTO();
 
     [Parameter]
@@ -33,16 +45,27 @@
 
     public bool IsVisible { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        await GetFolders();
+    }
+
+    protected async Task GetFolders()
+    {
+        folders = (await Http.GetFromJsonAsync<List<FolderDTO>>("https://localhost:44373/api/folder/all/66A5DB8A-47F7-48A5-98F8-80B34452BF34"))
+            .OrderBy(f => f.Name).ToList();
+    }
+
     protected async Task OnSave()
     {
         IsVisible = false;
 
         // Temporarily hard-coding meta data
         Favorite.OwnerId = Guid.Parse("66A5DB8A-47F7-48A5-98F8-80B34452BF34");
-        Favorite.FolderId = Guid.Parse("25641521-06E9-4E89-8425-EF22E365C5A4");
 
-        Console.WriteLine("[Adding New Favorite]");
+        Console.WriteLine("[Adding new favorite]");
         await Http.PostAsJsonAsync<FavoriteDTO>($"https://localhost:44373/api/favorite", Favorite);
+        Favorite = new FavoriteDTO();
         await OnNewFavoriteSaved.InvokeAsync(Favorite.Id);
     }
 }

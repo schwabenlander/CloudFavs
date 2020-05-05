@@ -1,7 +1,7 @@
 @page "/favorites"
 @inject HttpClient Http
 
-@if (favorites == null)
+@if (favorites == null || folders == null)
 {
     <p><em>Loading...</em></p>
 }
