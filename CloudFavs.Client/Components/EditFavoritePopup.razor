@@ -19,6 +19,17 @@
                 <ValidationMessage For="@(() => Favorite.Uri)" />
             </div>
 
+            <div class="form-group">
+                <label for="folderSelect">Folder: </label>
+                <InputSelectGuid id="folderSelect" class="form-control" @bind-Value="Favorite.FolderId">
+                    @foreach (var folder in folders)
+                    {
+                        <option value="@folder.Id">@folder.Name</option>
+                    }
+                </InputSelectGuid>
+                <ValidationMessage For="@(() => Favorite.FolderId)" />
+            </div>
+
             <button class="btn btn-success" type="submit">Save</button>
             <button class="btn btn-light" @onclick="@(() => IsVisible = false)">Cancel</button>
         </EditForm>
@@ -26,6 +37,8 @@
 </DxPopup>
 
 @code{
+    private List<FolderDTO> folders;
+
     [Parameter]
     public FavoriteDTO Favorite { get; set; }
 
@@ -33,6 +46,17 @@
     public EventCallback<Guid> OnEditSaved { get; set; }
 
     public bool IsVisible { get; set; }
+
+    protected async Task GetFolders()
+    {
+        folders = (await Http.GetFromJsonAsync<List<FolderDTO>>("https://localhost:44373/api/folder/all/66A5DB8A-47F7-48A5-98F8-80B34452BF34"))
+            .OrderBy(f => f.Name).ToList();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetFolders();
+    }
 
     protected async Task OnSave()
     {

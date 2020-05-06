@@ -4,11 +4,8 @@
     <td>@Favorite.Name</td>
     <td><a href="@Favorite.Uri" target="_blank">@Favorite.Uri</a></td>
     <td>
-        <DxButton RenderStyle="@ButtonRenderStyle.Info" RenderStyleMode="@ButtonRenderStyleMode.Contained"
-                  Click="@OnEditClicked" Text="Edit" />
-
-        <DxButton RenderStyle="@ButtonRenderStyle.Danger" RenderStyleMode="@ButtonRenderStyleMode.Contained"
-                  Click="@OnDeleteClicked" Text="Delete" />
+        <button class="btn btn-info" @onclick="OnEditClicked">Edit</button>
+        <button class="btn btn-danger" @onclick="OnDeleteClicked">Delete</button>
     </td>
 </tr>
 
