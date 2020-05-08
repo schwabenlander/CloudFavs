@@ -10,9 +10,11 @@ else
     <h1>@SelectedFolder.Name Favorites</h1>
 
     <AddFavoritePopup @ref="AddFavoritePopup" SelectedFolder="SelectedFolder" OnNewFavoriteSaved="OnNewFavoriteAdded"></AddFavoritePopup>
+    <AddFolderPopup @ref="AddFolderPopup" OnNewFolderSaved="OnNewFolderAdded"></AddFolderPopup>
 
-    <button class="btn btn-primary" @onclick="OnAddFavoriteButtonClicked">Add Favorite</button>
+    <button class="btn btn-primary" @onclick="@(() => AddFavoritePopup.IsVisible = true)">Add Favorite</button>
 
+    <button class="btn btn-outline-primary float-right" @onclick="@(() => AddFolderPopup.IsVisible = true)">+</button><text>&nbsp;</text>
     <DxComboBox CssClass="float-right" Data="@folders" TextFieldName="Name" @bind-SelectedItem="SelectedFolder"></DxComboBox>
 
     <p>&nbsp;</p>
@@ -28,7 +30,7 @@ else
         <tbody>
             @foreach (var favorite in favorites)
             {
-                <FavoriteRow @key="favorite" Favorite="favorite" 
+                <FavoriteRow @key="favorite" Favorite="favorite"
                              OnFavoriteDeleted="OnFavoriteDeleted"
                              OnFavoriteUpdated="OnFavoriteUpdated"></FavoriteRow>
             }
@@ -51,7 +53,8 @@ else
         }
     }
 
-    private AddFavoritePopup AddFavoritePopup { get; set; }
+    protected AddFavoritePopup AddFavoritePopup { get; set; }
+    protected AddFolderPopup AddFolderPopup { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -93,16 +96,17 @@ else
         await GetFavorites();
     }
 
-    protected void OnAddFavoriteButtonClicked(MouseEventArgs args)
-    {
-        AddFavoritePopup.IsVisible = true;
-    }
-
     protected async Task OnNewFavoriteAdded(FavoriteDTO favorite)
     {
         if (favorite.FolderId != SelectedFolder.Id)
             SelectedFolder = await Http.GetFromJsonAsync<FolderDTO>($"https://localhost:44373/api/folder/{favorite.FolderId}");
         else
             await GetFavorites();
+    }
+
+    protected async Task OnNewFolderAdded(FolderDTO folder)
+    {
+        Console.WriteLine($"[Added new folder: {folder.Id}]");
+        SelectedFolder = await Http.GetFromJsonAsync<FolderDTO>($"https://localhost:44373/api/folder/{folder.Id}");
     }
 }
