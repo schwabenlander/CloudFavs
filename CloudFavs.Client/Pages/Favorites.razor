@@ -107,6 +107,7 @@ else
     protected async Task OnNewFolderAdded(FolderDTO folder)
     {
         Console.WriteLine($"[Added new folder: {folder.Id}]");
+        await GetFolders();
         SelectedFolder = await Http.GetFromJsonAsync<FolderDTO>($"https://localhost:44373/api/folder/{folder.Id}");
     }
 }

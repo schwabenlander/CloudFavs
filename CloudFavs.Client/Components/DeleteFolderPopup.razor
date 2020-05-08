@@ -1,0 +1,27 @@
+﻿<DxPopup HeaderText="Delete Confirmation" @bind-Visible="@IsVisible">
+    <Content>
+        <p>
+            Are you sure you want to delete this folder?
+        </p>
+        <p>
+            <button class="btn btn-danger" @onclick="DeleteFavorite">Delete</button>
+            <button class="btn btn-light" @onclick="@(() => IsVisible = false)">Cancel</button>
+        </p>
+    </Content>
+</DxPopup>
+
+@code {
+    [Parameter]
+    public FolderDTO Folder { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> OnDeleteConfirmed { get; set; }
+
+    public bool IsVisible { get; set; }
+
+    protected async Task DeleteFavorite()
+    {
+        IsVisible = false;
+        await OnDeleteConfirmed.InvokeAsync(Folder.Id);
+    }
+}

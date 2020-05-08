@@ -1,0 +1,40 @@
+﻿@inject HttpClient Http
+
+<DxPopup HeaderText="Edit Folder" @bind-Visible="@IsVisible">
+    <Content>
+        <EditForm Model="@Folder" OnValidSubmit="@OnSave">
+
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label for="folderNameInput">Folder Name: </label>
+                <InputText id="folderNameInput" class="form-control" @bind-Value="Folder.Name" placeholder="Enter the folder's name"></InputText>
+                <ValidationMessage For="@(() => Folder.Name)" />
+            </div>
+
+            <button class="btn btn-success" type="submit">Save</button>
+            <button class="btn btn-light" @onclick="@(() => IsVisible = false)">Cancel</button>
+        </EditForm>
+    </Content>
+</DxPopup>
+
+@code{
+    [Parameter]
+    public FolderDTO Folder { get; set; }
+
+    [Parameter]
+    public EventCallback<FolderDTO> OnNewFolderSaved { get; set; }
+
+    public bool IsVisible { get; set; }
+
+    protected async Task OnSave()
+    {
+        IsVisible = false;
+
+        Console.WriteLine($"[Updating folder: {Folder.Id}]");
+        await Http.PutAsJsonAsync<FolderDTO>($"https://localhost:44373/api/folder/{Folder.Id}", Folder);
+        
+        await OnNewFolderSaved.InvokeAsync(Folder);
+    }
+}
