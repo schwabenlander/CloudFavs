@@ -15,7 +15,7 @@
 
             <div class="form-group">
                 <label for="favoriteUriInput">Favorite URI: </label>
-                <InputText id="favoriteUriInput" class="form-control" @bind-Value="@Favorite.Uri" placeholder="https://"></InputText>
+                <InputText id="favoriteUriInput" class="form-control" @bind-Value="@Favorite.Uri"></InputText>
                 <ValidationMessage For="@(() => Favorite.Uri)" />
             </div>
 
@@ -41,13 +41,22 @@
     public FavoriteDTO Favorite { get; set; } = new FavoriteDTO();
 
     [Parameter]
-    public EventCallback<Guid> OnNewFavoriteSaved { get; set; }
+    public EventCallback<FavoriteDTO> OnNewFavoriteSaved { get; set; }
+
+    [Parameter]
+    public FolderDTO SelectedFolder { get; set; }
 
     public bool IsVisible { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         await GetFolders();
+    }
+
+    protected override void OnParametersSet()
+    {
+        Favorite.FolderId = SelectedFolder.Id;
+        Favorite.Uri = "https://";
     }
 
     protected async Task GetFolders()
@@ -65,7 +74,7 @@
 
         Console.WriteLine("[Adding new favorite]");
         await Http.PostAsJsonAsync<FavoriteDTO>($"https://localhost:44373/api/favorite", Favorite);
+        await OnNewFavoriteSaved.InvokeAsync(Favorite);
         Favorite = new FavoriteDTO();
-        await OnNewFavoriteSaved.InvokeAsync(Favorite.Id);
     }
 }
