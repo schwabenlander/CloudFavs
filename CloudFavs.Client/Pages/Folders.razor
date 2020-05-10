@@ -1,0 +1,65 @@
+@page "/folders"
+@inject HttpClient Http
+
+@if (folders == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h1 class="float-left">Folders</h1>
+    <button class="btn btn-primary float-right" @onclick="@(() => AddFolderPopup.IsVisible = true)">New Folder</button>
+
+    <AddFolderPopup @ref="AddFolderPopup" OnNewFolderSaved="OnNewFolderAdded"></AddFolderPopup>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var folder in folders)
+            {
+                <FolderRow @key="folder" Folder="folder"
+                           OnFolderUpdated="FolderUpdated"
+                           OnFolderDeleted="FolderDeleted"></FolderRow>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<FolderDTO> folders;
+
+    protected AddFolderPopup AddFolderPopup { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetFolders();
+    }
+
+    protected async Task GetFolders()
+    {
+        Console.WriteLine("[Getting folders]");
+        folders = (await Http.GetFromJsonAsync<List<FolderDTO>>("https://localhost:44373/api/folder/all/66A5DB8A-47F7-48A5-98F8-80B34452BF34"))
+            .OrderBy(f => f.Name).ToList();
+    }
+
+    protected async Task FolderDeleted(Guid folderId)
+    {
+        await GetFolders();
+    }
+
+    protected async Task FolderUpdated(Guid folderId)
+    {
+        await GetFolders();
+    }
+
+    protected async Task OnNewFolderAdded(FolderDTO folder)
+    {
+        Console.WriteLine($"[Added new folder: {folder.Id}]");
+        await GetFolders();
+    }
+}

@@ -4,7 +4,7 @@
             Are you sure you want to delete this folder?
         </p>
         <p>
-            <button class="btn btn-danger" @onclick="DeleteFavorite">Delete</button>
+            <button class="btn btn-danger" @onclick="DeleteFolder">Delete</button>
             <button class="btn btn-light" @onclick="@(() => IsVisible = false)">Cancel</button>
         </p>
     </Content>
@@ -19,7 +19,7 @@
 
     public bool IsVisible { get; set; }
 
-    protected async Task DeleteFavorite()
+    protected async Task DeleteFolder()
     {
         IsVisible = false;
         await OnDeleteConfirmed.InvokeAsync(Folder.Id);

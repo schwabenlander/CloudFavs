@@ -24,7 +24,7 @@
     public FolderDTO Folder { get; set; }
 
     [Parameter]
-    public EventCallback<FolderDTO> OnNewFolderSaved { get; set; }
+    public EventCallback<FolderDTO> OnEditFolderSaved { get; set; }
 
     public bool IsVisible { get; set; }
 
@@ -35,6 +35,6 @@
         Console.WriteLine($"[Updating folder: {Folder.Id}]");
         await Http.PutAsJsonAsync<FolderDTO>($"https://localhost:44373/api/folder/{Folder.Id}", Folder);
         
-        await OnNewFolderSaved.InvokeAsync(Folder);
+        await OnEditFolderSaved.InvokeAsync(Folder);
     }
 }

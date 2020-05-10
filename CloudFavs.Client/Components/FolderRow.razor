@@ -1,0 +1,48 @@
+﻿@inject HttpClient Http
+
+<tr>
+    <td><a href="favorites/folder/@Folder.Id">@Folder.Name</a></td>
+    <td>
+        <button class="btn btn-info" @onclick="OnEditClicked">Edit</button>
+        <button class="btn btn-danger" @onclick="OnDeleteClicked">Delete</button>
+    </td>
+</tr>
+
+<DeleteFolderPopup @ref="DeleteFolderPopup" Folder="Folder" OnDeleteConfirmed="DeleteFolder"></DeleteFolderPopup>
+<EditFolderPopup @ref="EditFolderPopup" Folder="Folder" OnEditFolderSaved="UpdateFavorite"></EditFolderPopup>
+
+@code{
+    [Parameter]
+    public FolderDTO Folder { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> OnFolderDeleted { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> OnFolderUpdated { get; set; }
+
+    private EditFolderPopup EditFolderPopup { get; set; }
+    private DeleteFolderPopup DeleteFolderPopup { get; set; }
+
+    protected void OnDeleteClicked(MouseEventArgs args)
+    {
+        DeleteFolderPopup.IsVisible = true;
+    }
+
+    protected async Task DeleteFolder(Guid folderId)
+    {
+        Console.WriteLine($"[Deleting folder: {folderId.ToString()}]");
+        await Http.DeleteAsync($"https://localhost:44373/api/folder/{folderId}");
+        await OnFolderDeleted.InvokeAsync(folderId);
+    }
+
+    protected void OnEditClicked(MouseEventArgs args)
+    {
+        EditFolderPopup.IsVisible = true;
+    }
+
+    public async Task UpdateFavorite(FolderDTO folder)
+    {
+        await OnFolderUpdated.InvokeAsync(folder.Id);
+    }
+}
